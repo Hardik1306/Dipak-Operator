@@ -1,0 +1,49 @@
+testing codes
+
+
+
+
+//
+//void loop() {
+//  //  encoder.read();
+// while(digitalRead(35) == 0){
+//  gripper.anti_clockwise(100);}
+//  gripper.brake();
+////    if (Serial.available() > 0) {
+//  //    x =  Serial.parseFloat();
+//  //  }
+//  //  dac_set_voltage(x);
+//  //  buttonState = digitalRead(35);
+//  //  if (buttonState != lastButtonState) {
+//  //    if (buttonState == LOW) {
+//  //      buttonPushCounter++;
+//  //    }
+//  //  }
+//  //  lastButtonState = buttonState;
+//  //  if (buttonPushCounter % 2 == 0) {
+//  //    high(0);
+//  //    low(1);
+//  //    flag = 1;
+//  //  }
+//  //  else {
+//  //    if (flag == 1) {
+//  //      dac_set_voltage(0.5);
+//  //      flag = 0;
+//  //      delay(200);
+//  //    }
+//  //
+//  //    high(1);
+//  //    low(0);
+//  //    delay(500);
+//  //  }
+//
+//}
+
+
+
+
+
+for(i = 0; i < 16;i++){
+high(i);
+delay (50);
+}
