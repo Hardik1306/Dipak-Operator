@@ -100,7 +100,7 @@ void loop() {
   else if (button == 50);
 
   else if (button == 45 && !start) {
-    pressure = pressure + 163;
+    pressure = pressure + 15;
     dac.setVoltage(pressure, false);
     start = 1;
     currentMillis = millis();
@@ -109,7 +109,7 @@ void loop() {
   else if (button == 45) {
     currentMillis = millis();
     if ((currentMillis - previousMillis) >= interval) {
-      pressure = pressure + 15;
+      pressure = pressure + 5;
       pressure = constrain(pressure , 0, 4095);
       dac.setVoltage(pressure, false);
       Serial.println(pressure);
@@ -117,7 +117,7 @@ void loop() {
     }
   }
   else if (button == 40 && !select) {
-    pressure = pressure - 163;
+    pressure = pressure - 15;
     dac.setVoltage(pressure, false);
     select = 1;
     currentMillis1 = millis();
@@ -126,7 +126,7 @@ void loop() {
   else if (button == 40) {
     currentMillis1 = millis();
     if ((currentMillis1 - previousMillis1) >= interval) {
-      pressure = pressure - 15;
+      pressure = pressure - 5;
       pressure = constrain(pressure , 0, 4095);
       dac.setVoltage(pressure, false);
       Serial.println(pressure);
