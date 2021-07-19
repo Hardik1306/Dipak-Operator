@@ -5,12 +5,15 @@
 #include "Motor.h"
 #include"cytron.h"
 #include <Encoder.h>
+#include <LiquidCrystal_I2C.h>
 Adafruit_MCP4725 dac;
 Adafruit_MCP23017 mcp;
-Motor pipe_motor(35,37, 7);
+Motor pipe_motor(35, 37, 7);
 
 int buttonstate = 0;
 int lastbuttonstate = 0;
+
+Encoder enc(2, 3);
 
 bool r3 = 0;
 bool circle = 0;
@@ -29,7 +32,7 @@ int pressure;
 unsigned long currentMillis;
 unsigned long currentMillis1;
 
-
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 ISR(SPI_STC_vect) {
   button = SPDR;
@@ -50,13 +53,16 @@ void setup() {
   }
   dac.begin(0x60);
   dac.setVoltage(0, false);
-
+  lcd.clear();
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
 }
 
 
 void loop() {
   Serial.println(button);
-    if (button == 55 && !r3) {
+  if (button == 55 && !r3) {
     r3 = 1;
     pipe_pnumetic = !pipe_pnumetic;
     mcp.digitalWrite(7, pipe_pnumetic);
@@ -91,22 +97,22 @@ void loop() {
     low(5);
   }
   else if (button == 15);
-  else if (button == 50 && !r3) {
+  else if (button == 60 && !r3) {
     r3 = 1;
     high(6);
     delay(500);
     low(6);
   }
-  else if (button == 50);
+  else if (button == 60);
 
-  else if (button == 45 && !start) {
+  else if (button == 55 && !start) {
     pressure = pressure + 15;
     dac.setVoltage(pressure, false);
     start = 1;
     currentMillis = millis();
     previousMillis = currentMillis;
   }
-  else if (button == 45) {
+  else if (button == 55) {
     currentMillis = millis();
     if ((currentMillis - previousMillis) >= interval) {
       pressure = pressure + 5;
@@ -116,14 +122,14 @@ void loop() {
       delay(10);
     }
   }
-  else if (button == 40 && !select) {
+  else if (button == 50 && !select) {
     pressure = pressure - 15;
     dac.setVoltage(pressure, false);
     select = 1;
     currentMillis1 = millis();
     previousMillis1 = currentMillis1;
   }
-  else if (button == 40) {
+  else if (button == 50) {
     currentMillis1 = millis();
     if ((currentMillis1 - previousMillis1) >= interval) {
       pressure = pressure - 5;
@@ -149,7 +155,16 @@ void loop() {
     select = 0;
     start = 0;
   }
+  if (digitalRead(A6)) {
+    enc.write(0);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(enc.read());
+  }
 }
+
+
+
 void high(uint8_t pin) {
   mcp.digitalWrite(pin, HIGH);
 }
@@ -159,6 +174,19 @@ void low(uint8_t pin) {
 void dac_set_voltage(float y) {
   int z = (y * 4095) / 5.07;
   dac.setVoltage(z, false);
+}
+void print_angle() {
+  byte x;
+  x  = (enc.read() * 108) / 3500;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Angle    - ");
+  lcd.setCursor(11, 0);
+  lcd.print(x);
+  lcd.setCursor(0, 1);
+  lcd.print("Enc_Read - ");
+  lcd.setCursor(11, 1);
+  lcd.print(enc.read());
 }
 //void throw_arrow() {
 //  high(pipe + 1);
